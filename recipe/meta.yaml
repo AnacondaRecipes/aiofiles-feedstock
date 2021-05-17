@@ -12,18 +12,17 @@ source:
   sha256: {{ sha256 }}
 
 build:
+  noarch: python
   number: 0
-  script: python setup.py install --single-version-externally-managed --record record.txt
-  skip: True  # [py<33]
+  script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
-    - python
-    - setuptools
+    - python >=3.6
+    - pip
+    - poetry-core >=1.0.0
   run:
-    - python
-    - asyncio  # [py<34]
-    - singledispatch  # [py<34]
+    - python >=3.6
 
 test:
   imports:
@@ -40,3 +39,4 @@ about:
 extra:
   recipe-maintainers:
     - kszucs
+    - carlodri
