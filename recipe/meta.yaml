@@ -1,49 +1,50 @@
 {% set name = "aiofiles" %}
-{% set version = "22.1.0" %}
-{% set sha256 = "9107f1ca0b2a5553987a94a3c9959fe5b491fdf731389aa5b7b1bd0733e32de6" %}
+{% set version = "23.2.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/aiofiles-{{ version }}.tar.gz
+  sha256: 84ec2218d8419404abcb9f0c02df3f34c6e0a68ed41072acfb1cef5cbc29051a
 
 build:
+  noarch: python
   number: 0
-  skip: true # [py<37]
-  script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
-    - python
+    - python >=3.7
+    - hatchling
     - pip
-    - poetry-core >=1.4.0
-    - wheel
+    - poetry-core >=1.0.0
   run:
-    - python
+    - python >=3.7
 
 test:
   imports:
     - aiofiles
-  requires:
-    - pip
-  commands:
-    - pip check
 
 about:
   home: https://github.com/Tinche/aiofiles
   summary: File support for asyncio
-  description: syaiofiles is an Apache2 licensed library, written in Python, for handling local disk files in asyncio applications.
   license: Apache-2.0
-  license_file: LICENSE
+  license_file:
+    - LICENSE
+    - NOTICE
   license_family: Apache
   dev_url: https://github.com/Tinche/aiofiles
-  doc_url: https://github.com/Tinche/aiofiles/blob/main/README.rst
+  doc_url: https://github.com/Tinche/aiofiles/blob/main/README.md
 
 extra:
+  anaconda-services:
+    ref: https://anaconda.zendesk.com/agent/tickets/49522
+    reason: Dependency for chainlit
   recipe-maintainers:
+    - ianaobi
+  recipe-maintainers:
+    - xylar
     - kszucs
     - carlodri
