@@ -1,37 +1,39 @@
 {% set name = "aiofiles" %}
-{% set version = "22.1.0" %}
-{% set sha256 = "9107f1ca0b2a5553987a94a3c9959fe5b491fdf731389aa5b7b1bd0733e32de6" %}
+{% set version = "24.1.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 22a075c9e5a3810f0c2e48f3008c94d68c65d763b9b03857924c99e57355166c
 
 build:
   number: 0
-  skip: true # [py<37]
-  script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true # [py<38]
 
 requirements:
   host:
     - python
     - pip
-    - poetry-core >=1.4.0
-    - wheel
+    - hatchling
   run:
     - python
 
 test:
+  source_files:
+    - tests
   imports:
     - aiofiles
-  requires:
-    - pip
   commands:
     - pip check
+    - pytest -v --asyncio-mode=auto tests
+  requires:
+    - pip
+    - pytest >=8.2.2
+    - pytest-asyncio >=0.23.7
 
 about:
   home: https://github.com/Tinche/aiofiles
@@ -41,7 +43,7 @@ about:
   license_file: LICENSE
   license_family: Apache
   dev_url: https://github.com/Tinche/aiofiles
-  doc_url: https://github.com/Tinche/aiofiles/blob/main/README.rst
+  doc_url: https://github.com/Tinche/aiofiles/blob/main/README.md
 
 extra:
   recipe-maintainers:
